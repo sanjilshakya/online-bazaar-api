@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "password is a required field."],
+    select: false
   },
   confirmPassword: {
     type: String,
@@ -61,6 +62,13 @@ userSchema.pre("save", async function (next) {
   this.confirmPassword = undefined;
   next();
 });
+
+userSchema.methods.verifyPassword = async function (
+  reqBodyPassword,
+  userPassword
+) {
+  return await bcrypt.compare(reqBodyPassword, userPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 
