@@ -1,14 +1,18 @@
-exports.getCategories = (req, res, next) => {
-  res.status(200).json({
-    status: "success",
-    data: [],
-  });
-};
+const Category = require("../models/categoryModel");
+const {
+  getAll,
+  getOne,
+  createOne,
+  updateOne,
+  deleteOne,
+} = require("./handlerFactory");
 
-exports.getCategory = (req, res, next) => {};
+exports.getCategories = getAll(Category);
 
-exports.createCategory = (req, res, next) => {};
+exports.getCategory = getOne(Category);
 
-exports.updateCategory = (req, res, next) => {};
+exports.createCategory = createOne(Category);
 
-exports.deleteCategory = (req, res, next) => {};
+exports.updateCategory = updateOne(Category);
+
+exports.deleteCategory = deleteOne(Category);
