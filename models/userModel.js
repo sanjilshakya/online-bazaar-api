@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -22,6 +23,16 @@ const userSchema = new mongoose.Schema({
       validator.isEmail,
       "Please enter a valid email. Ex: abc@gmail.com",
     ],
+  },
+  dob: {
+    type: Date,
+    required: [true, "dob is a required field."],
+  },
+  phone: {
+    type: String,
+    required: [true, "phone is a required field."],
+    minLength: [10, "phone number should be 10 digits"],
+    maxLength: [10, "phone number should be 10 digits"],
   },
   password: {
     type: String,
@@ -70,6 +81,18 @@ userSchema.methods.verifyPassword = async function (
   return await bcrypt.compare(reqBodyPassword, userPassword);
 };
 
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetExpires = Date.now() + 10 * 30 * 1000;
+
+  return resetToken;
+};
+
 userSchema.methods.changedPasswordAfter = function (jwtTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
@@ -81,6 +104,13 @@ userSchema.methods.changedPasswordAfter = function (jwtTimestamp) {
   }
   //pw not changed
   return false;
+};
+
+userSchema.methods.correctPassword = async function (
+  reqBodyPassword,
+  userPassowrd
+) {
+  return await bcrypt.compare(reqBodyPassword, userPassowrd);
 };
 
 const User = mongoose.model("User", userSchema);

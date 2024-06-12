@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "price is a required field"],
     },
-    images: [String],
+    imagePath: String,
     category: {
       type: mongoose.Schema.ObjectId,
       ref: "Category",
