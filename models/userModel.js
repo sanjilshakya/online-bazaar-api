@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "password is a required field."],
-    select: false
+    select: false,
   },
   confirmPassword: {
     type: String,
@@ -68,6 +68,19 @@ userSchema.methods.verifyPassword = async function (
   userPassword
 ) {
   return await bcrypt.compare(reqBodyPassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function (jwtTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    //pw was changed then returns true or else false
+    return jwtTimestamp < changedTimestamp;
+  }
+  //pw not changed
+  return false;
 };
 
 const User = mongoose.model("User", userSchema);

@@ -6,6 +6,7 @@ const categoryRouter = require("./routes/categoryRouter");
 const productRouter = require("./routes/productRouter");
 const orderRouter = require("./routes/orderRouter");
 const { globalErrorHandler } = require("./controllers/errorController");
+const AppError = require("./utils/appError");
 
 const app = express();
 
@@ -18,6 +19,11 @@ app.use("/api/users", userRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
+
+//Handling Unhandled Routes
+app.all("*", (req, res, next) => {
+  next(new AppError(`Cannot find ${req.originalUrl} in this server`, 404));
+});
 
 app.use(globalErrorHandler);
 
