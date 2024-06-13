@@ -37,14 +37,29 @@ const createTokenResponseBody = (user, statusCode, res) => {
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
-  const { firstName, lastName, email, phone, dob, password, confirmPassword } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    dob,
+    addressLine1,
+    city,
+    province,
+    postalCode,
+    password,
+    confirmPassword,
+  } = req.body;
   const user = await User.create({
     firstName,
     lastName,
     email,
     phone,
     dob,
+    addressLine1,
+    city,
+    province,
+    postalCode,
     password,
     confirmPassword,
   });

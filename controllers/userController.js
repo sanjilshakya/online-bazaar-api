@@ -23,6 +23,16 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
+filterReqObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((el) => {
+    if (allowedFields.includes(el)) {
+      newObj[el] = obj[el];
+    }
+  });
+  return newObj;
+};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.confirmPassword)
     return next(
@@ -32,7 +42,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
 
   // filter out unwanted fields that are not allowed to be updated.
-  const filteredBody = filterReqObj(req.body, "name", "email");
+  const filteredBody = filterReqObj(
+    req.body,
+    "firstName",
+    "lastName",
+    "phone",
+    "dob",
+    "addressLine1",
+    "city",
+    "province",
+    "postalCode"
+  );
   if (req.file) filteredBody.photo = req.file.filename;
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {

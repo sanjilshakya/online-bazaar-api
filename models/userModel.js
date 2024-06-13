@@ -34,6 +34,24 @@ const userSchema = new mongoose.Schema({
     minLength: [10, "phone number should be 10 digits"],
     maxLength: [10, "phone number should be 10 digits"],
   },
+  addressLine1: {
+    type: String,
+    required: [true, "addressLine1 is a required field."],
+  },
+  city: {
+    type: String,
+    required: [true, "city is a required field."],
+  },
+  province: {
+    type: String,
+    required: [true, "province is a required field."],
+  },
+  postalCode: {
+    type: String,
+    required: [true, "postalCode is a required field."],
+    minLength: [6, "postalCode should be 6 digits"],
+    maxLength: [6, "postalCode should be 6 digits"],
+  },
   password: {
     type: String,
     required: [true, "password is a required field."],
