@@ -8,6 +8,11 @@ const {
   deleteOne,
 } = require("./handlerFactory");
 
+exports.getAll = getAll(ShoppingCart, {
+  path: "product",
+  select: "name price",
+});
+
 exports.getOne = getOne(ShoppingCart, {
   path: "product",
   select: "name price",

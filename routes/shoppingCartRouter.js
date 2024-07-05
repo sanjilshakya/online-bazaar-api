@@ -1,9 +1,9 @@
-const { getAll } = require("../controllers/handlerFactory");
 const {
   create,
   findByCartAndProductId,
   update,
   getOne,
+  getAll
 } = require("../controllers/shoppingCartController");
 
 const router = require("express").Router();

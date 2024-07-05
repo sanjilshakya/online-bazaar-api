@@ -4,6 +4,7 @@ const shoppingCartSchema = new mongoose.Schema({
   dateCreated: {
     type: Date,
   },
+  userId: { type: String },
   product: [
     // { type: mongoose.Schema.ObjectId, ref: "Product"},
   ],
